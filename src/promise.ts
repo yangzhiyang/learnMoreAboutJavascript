@@ -2,7 +2,11 @@ class MyPromise {
   onFulfilled = null;
   onRejected = null;
   resolve() {
-    setTimeout(() => this.onFulfilled(), 0);
+    setTimeout(() => {
+      if (typeof this.onFulfilled === "function") {
+        this.onFulfilled();
+      }
+    }, 0);
   }
   reject() {
     setTimeout(() => this.onRejected(), 0);
@@ -13,9 +17,10 @@ class MyPromise {
     }
     fn(this.resolve.bind(this), this.reject.bind(this));
   }
-  then(onFulfilled, onRejected) {
-    this.onFulfilled = onFulfilled;
-    this.onRejected = onRejected;
+  then(onFulfilled?, onRejected?) {
+    if (typeof onFulfilled === "function") {
+      this.onFulfilled = onFulfilled;
+    }
   }
 }
 

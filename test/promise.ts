@@ -76,6 +76,12 @@ describe("Promise", () => {
     const promise = new Promise(resolve => {
       resolve();
     });
+    promise.then(false);
+  });
+  it("如果 onRejected 不是函数，则必须忽略", () => {
+    const promise = new Promise((resolve, onRejected) => {
+      onRejected();
+    });
     promise.then(false, null);
   });
 });
