@@ -84,13 +84,18 @@ describe("Promise", () => {
     });
     promise.then(false, null);
   });
-  it("onFulfilled 必须在 promise 完成(fulfilled)后被调用，并把 promise 的值作为它的第一个参数", done => {
+  it(`onFulfilled 必须在 promise 完成(fulfilled)后被调用，
+    并把 promise 的值作为它的第一个参数, 函数在promise完成(fulfilled)之前绝对不能被调用
+    并不能被调用超过一次`, done => {
     const onFulfilled = sinon.fake();
     const promise = new Promise(resolve => {
+      assert.isFalse(onFulfilled.called);
       resolve(123);
+      resolve(456);
       setTimeout(() => {
         assert(promise.state === "fulfilled");
         assert(onFulfilled.calledWith(123));
+        assert(onFulfilled.calledOnce);
         done();
       }, 0);
     });

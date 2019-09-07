@@ -3,9 +3,10 @@ class MyPromise {
   onRejected = null;
   state = "pending";
   resolve(result) {
+    if (this.state !== "pending") return;
+    this.state = "fulfilled";
     setTimeout(() => {
       if (typeof this.onFulfilled === "function") {
-        this.state = "fulfilled";
         this.onFulfilled(result);
       }
     }, 0);
