@@ -26,5 +26,9 @@ describe('Promise', () => {
       new Promise('promise');
     });
   });
+  it('new Promise(fn) 会生成一个带有 then 方法的对象', () => {
+    const promise = new Promise(() => {});
+    assert.isFunction(promise.then)
+  })
 })
 
