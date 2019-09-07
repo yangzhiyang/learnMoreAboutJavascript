@@ -29,6 +29,13 @@ describe('Promise', () => {
   it('new Promise(fn) 会生成一个带有 then 方法的对象', () => {
     const promise = new Promise(() => {});
     assert.isFunction(promise.then)
+  });
+  it('new Promise(fn) 中传入的 fn 立即执行', () => {
+    let called = false;
+    const promise = new Promise(() => {
+      called = true;
+    });
+    assert.isTrue(called);
   })
 })
 
