@@ -10,8 +10,21 @@ describe('Promise', () => {
   });
   it('new Promise() 必须接收一个函数', () => {
     assert.throw(() => {
+      // @ts-ignore
       new Promise();
-    })
-  })
+    });
+    assert.throw(() => {
+      // @ts-ignore
+      new Promise(1);
+    });
+    assert.throw(() => {
+      // @ts-ignore
+      new Promise(true);
+    });
+    assert.throw(() => {
+      // @ts-ignore
+      new Promise('promise');
+    });
+  });
 })
 
