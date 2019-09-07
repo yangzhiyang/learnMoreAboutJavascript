@@ -46,30 +46,36 @@ describe("Promise", () => {
       done();
     });
   });
-  it("promise.then(success) 中的 success 会在 reslove 被调用的时候执行", done => {
-    const success = sinon.fake();
+  it("promise.then(onFulfilled) 中的 onFulfilled 会在 reslove 被调用的时候执行", done => {
+    const onFulfilled = sinon.fake();
     const promise = new Promise((resolve, reject) => {
-      assert.isFalse(success.called);
+      assert.isFalse(onFulfilled.called);
       resolve();
       setTimeout(() => {
-        assert.isTrue(success.called);
+        assert.isTrue(onFulfilled.called);
         done();
       });
     });
     // @ts-ignore
-    promise.then(success);
+    promise.then(onFulfilled);
   });
-  it("promise.then(null, fail) 中的 fail 会在 reject 被调用的时候执行", done => {
-    const fail = sinon.fake();
+  it("promise.then(null, onRejected) 中的 onRejected 会在 reject 被调用的时候执行", done => {
+    const onRejected = sinon.fake();
     const promise = new Promise((resolve, reject) => {
-      assert.isFalse(fail.called);
+      assert.isFalse(onRejected.called);
       reject();
       setTimeout(() => {
-        assert.isTrue(fail.called);
+        assert.isTrue(onRejected.called);
         done();
       });
     });
     // @ts-ignore
-    promise.then(null, fail);
+    promise.then(null, onRejected);
+  });
+  it("如果 onFulfilled 不是函数，则必须忽略", () => {
+    const promise = new Promise(resolve => {
+      resolve();
+    });
+    promise.then(false, null);
   });
 });

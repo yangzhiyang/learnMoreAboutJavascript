@@ -1,11 +1,11 @@
 class MyPromise {
-  succeed = null;
-  fail = null;
+  onFulfilled = null;
+  onRejected = null;
   resolve() {
-    setTimeout(() => this.succeed(), 0);
+    setTimeout(() => this.onFulfilled(), 0);
   }
   reject() {
-    setTimeout(() => this.fail(), 0);
+    setTimeout(() => this.onRejected(), 0);
   }
   constructor(fn) {
     if (typeof fn !== "function") {
@@ -13,9 +13,9 @@ class MyPromise {
     }
     fn(this.resolve.bind(this), this.reject.bind(this));
   }
-  then(succeed, fail) {
-    this.succeed = succeed;
-    this.fail = fail;
+  then(onFulfilled, onRejected) {
+    this.onFulfilled = onFulfilled;
+    this.onRejected = onRejected;
   }
 }
 
