@@ -118,4 +118,23 @@ describe("Promise", () => {
     });
     promise.then(null, onRejected);
   });
+  it("在 Promise 代码未执行完之前，不得调用 onFulfilled 和 onRejected", done => {
+    const onFulfilled = sinon.fake();
+    const onRejected = sinon.fake();
+    const promise1 = new Promise(resolve => {
+      resolve();
+    });
+    const promise2 = new Promise((resolve, reject) => {
+      reject();
+    });
+    promise1.then(onFulfilled);
+    promise2.then(null, onRejected);
+    assert.isFalse(onFulfilled.called);
+    assert.isFalse(onRejected.called);
+    setTimeout(() => {
+      assert.isTrue(onFulfilled.called);
+      assert.isTrue(onRejected.called);
+      done();
+    }, 0);
+  });
 });
