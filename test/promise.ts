@@ -36,6 +36,16 @@ describe('Promise', () => {
       called = true;
     });
     assert.isTrue(called);
-  })
+  });
+  it('fn 接收 resolve、reject 两个函数', () => {
+    let called = false;
+    const promise = new Promise((resolve, reject) => {
+      called = true;
+      assert.isFunction(resolve);
+      assert.isFunction(reject);
+    });
+    assert.isTrue(called);
+  });
+
 })
 
