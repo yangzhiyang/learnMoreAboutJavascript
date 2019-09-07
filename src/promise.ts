@@ -1,17 +1,19 @@
 class MyPromise {
   onFulfilled = null;
   onRejected = null;
-  resolve() {
+  state = "pending";
+  resolve(result) {
     setTimeout(() => {
       if (typeof this.onFulfilled === "function") {
-        this.onFulfilled();
+        this.state = "fulfilled";
+        this.onFulfilled(result);
       }
     }, 0);
   }
-  reject() {
+  reject(reason) {
     setTimeout(() => {
       if (typeof this.onRejected === "function") {
-        this.onRejected();
+        this.onRejected(reason);
       }
     }, 0);
   }

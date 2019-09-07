@@ -84,4 +84,16 @@ describe("Promise", () => {
     });
     promise.then(false, null);
   });
+  it("onFulfilled 必须在 promise 完成(fulfilled)后被调用，并把 promise 的值作为它的第一个参数", done => {
+    const onFulfilled = sinon.fake();
+    const promise = new Promise(resolve => {
+      resolve(123);
+      setTimeout(() => {
+        assert(promise.state === "fulfilled");
+        assert(onFulfilled.calledWith(123));
+        done();
+      }, 0);
+    });
+    promise.then(onFulfilled);
+  });
 });
