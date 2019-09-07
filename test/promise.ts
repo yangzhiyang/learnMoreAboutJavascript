@@ -147,4 +147,38 @@ describe("Promise", () => {
       done();
     });
   });
+  it("then 可以在同一个 promise 中调用多次", done => {
+    const callbacks = [sinon.fake(), sinon.fake(), sinon.fake()];
+    const promise = new Promise(resolve => {
+      resolve();
+    });
+    promise.then(callbacks[0]);
+    promise.then(callbacks[1]);
+    promise.then(callbacks[2]);
+    setTimeout(() => {
+      assert(callbacks[0].called);
+      assert(callbacks[1].called);
+      assert(callbacks[2].called);
+      assert(callbacks[1].calledAfter(callbacks[0]));
+      assert(callbacks[2].calledAfter(callbacks[1]));
+      done();
+    }, 0);
+  });
+  it("then 可以在同一个 promise 中调用多次", done => {
+    const callbacks = [sinon.fake(), sinon.fake(), sinon.fake()];
+    const promise = new Promise((resolve, reject) => {
+      reject();
+    });
+    promise.then(null, callbacks[0]);
+    promise.then(null, callbacks[1]);
+    promise.then(null, callbacks[2]);
+    setTimeout(() => {
+      assert(callbacks[0].called);
+      assert(callbacks[1].called);
+      assert(callbacks[2].called);
+      assert(callbacks[1].calledAfter(callbacks[0]));
+      assert(callbacks[2].calledAfter(callbacks[1]));
+      done();
+    }, 0);
+  });
 });
