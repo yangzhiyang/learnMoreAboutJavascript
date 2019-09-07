@@ -46,6 +46,17 @@ describe('Promise', () => {
     });
     assert.isTrue(called);
   });
-
+  it('promise.then(success) 中的 success 会在 reslove 被调用的时候执行', () => {
+    let called = false;
+    const promise = new Promise((resolve, reject) => {
+      assert.isFalse(called);
+      resolve();
+      assert.isTrue(called);
+    });
+    // @ts-ignore
+    promise.then(() => {
+      called = true;
+    })
+  });
 })
 
