@@ -137,4 +137,14 @@ describe("Promise", () => {
       done();
     }, 0);
   });
+  it("onFulfilled 和 onRejected 被调用时，不能把 this 带进来", done => {
+    const promise = new Promise(resolve => {
+      resolve();
+    });
+    promise.then(function() {
+      "use strict";
+      assert(this === undefined);
+      done();
+    });
+  });
 });
