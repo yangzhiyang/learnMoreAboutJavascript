@@ -101,4 +101,21 @@ describe("Promise", () => {
     });
     promise.then(onFulfilled);
   });
+  it(`onRejected 必须在 promise 完成(rejected)后被调用，
+    并把 promise 的 reason 值作为它的第一个参数, 函数在promise完成(rejected)之前绝对不能被调用
+    并不能被调用超过一次`, done => {
+    const onRejected = sinon.fake();
+    const promise = new Promise((resolve, reject) => {
+      assert.isFalse(onRejected.called);
+      reject(123);
+      reject(456);
+      setTimeout(() => {
+        assert(promise.state === "rejected");
+        assert(onRejected.calledWith(123));
+        assert(onRejected.calledOnce);
+        done();
+      }, 0);
+    });
+    promise.then(null, onRejected);
+  });
 });
