@@ -9,7 +9,11 @@ class MyPromise {
     }, 0);
   }
   reject() {
-    setTimeout(() => this.onRejected(), 0);
+    setTimeout(() => {
+      if (typeof this.onRejected === "function") {
+        this.onRejected();
+      }
+    }, 0);
   }
   constructor(fn) {
     if (typeof fn !== "function") {
@@ -20,6 +24,9 @@ class MyPromise {
   then(onFulfilled?, onRejected?) {
     if (typeof onFulfilled === "function") {
       this.onFulfilled = onFulfilled;
+    }
+    if (typeof onRejected === "function") {
+      this.onRejected = onRejected;
     }
   }
 }
