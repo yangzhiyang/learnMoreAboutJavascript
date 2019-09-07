@@ -5,6 +5,7 @@ class MyPromise {
       
     }
   }
+  then() {}
 }
 
 export default MyPromise;
