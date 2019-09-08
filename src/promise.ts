@@ -1,99 +1,115 @@
 class MyPromise {
   callbacks = [];
   state = "pending";
-  resolve(result) {
-    if (this.state !== "pending") return;
-    this.state = "fulfilled";
-    nextTick(() => {
-      this.callbacks.forEach(handler => {
-        if (typeof handler[0] === "function") {
-          let x;
-          try {
-            x = handler[0].call(undefined, result);
-          } catch (error) {
-            return handler[2].reject(error);
-          }
-          handler[2].resolveWith(x);
-        }
-      });
-    });
-  }
-  reject(reason) {
-    if (this.state !== "pending") return;
-    this.state = "rejected";
-    nextTick(() => {
-      this.callbacks.forEach(handler => {
-        if (typeof handler[1] === "function") {
-          let x;
-          try {
-            x = handler[1].call(undefined, reason);
-          } catch (error) {
-            return handler[2].reject(error);
-          }
-          handler[2].resolveWith(x);
-        }
-      });
-    });
-  }
+
   constructor(fn) {
     if (typeof fn !== "function") {
       throw new Error("Promise只接收函数");
     }
     fn(this.resolve.bind(this), this.reject.bind(this));
   }
+
+  private resolveOrReject(state, data) {
+    if (this.state !== "pending") return;
+    this.state = state;
+    const i = ["fulfilled", "rejected"].indexOf(state);
+    nextTick(() => {
+      this.callbacks.forEach(handler => {
+        if (typeof handler[i] === "function") {
+          let x;
+          try {
+            x = handler[i].call(undefined, data);
+          } catch (error) {
+            return handler[2].reject(error);
+          }
+          handler[2].resolveWith(x);
+        }
+      });
+    });
+  }
+
+  resolve(result) {
+    this.resolveOrReject("fulfilled", result);
+  }
+
+  reject(reason) {
+    this.resolveOrReject("rejected", reason);
+  }
+
   then(onFulfilled?, onRejected?) {
     const handler = [];
-    if (typeof onFulfilled === "function") {
-      handler[0] = onFulfilled;
-    } else {
-      handler[0] = value => value;
-    }
-    if (typeof onRejected === "function") {
-      handler[1] = onRejected;
-    } else {
-      handler[1] = e => {
-        throw e;
-      };
-    }
+    typeof onFulfilled === "function"
+      ? (handler[0] = onFulfilled)
+      : (handler[0] = value => value);
+
+    typeof onRejected === "function"
+      ? (handler[1] = onRejected)
+      : (handler[1] = e => {
+          throw e;
+        });
+
     handler[2] = new MyPromise(() => {});
     this.callbacks.push(handler);
+
     return handler[2];
   }
-  resolveWith(x) {
-    if (this === x) {
-      this.reject(new TypeError());
-    } else if (x instanceof MyPromise) {
+
+  resolveWithSelf() {
+    this.reject(new TypeError());
+  }
+
+  resolveWithPromise(x) {
+    x.then(
+      result => {
+        this.resolve(result);
+      },
+      reason => {
+        this.reject(reason);
+      }
+    );
+  }
+
+  resolveWihtThenable(x) {
+    try {
       x.then(
-        result => {
-          this.resolve(result);
+        y => {
+          this.resolveWith(y);
         },
-        reason => {
-          this.reject(reason);
+        r => {
+          this.reject(r);
         }
       );
+    } catch (error) {
+      this.reject(error);
+    }
+  }
+
+  resolveWithObject(x) {
+    const then = this.getThen(x);
+    if (then instanceof Function) {
+      this.resolveWihtThenable(x);
+    } else {
+      this.resolve(x);
+    }
+  }
+
+  private getThen(x) {
+    let then;
+    try {
+      then = x.then;
+    } catch (error) {
+      this.reject(error);
+    }
+    return then;
+  }
+
+  resolveWith(x) {
+    if (this === x) {
+      this.resolveWithSelf();
+    } else if (x instanceof MyPromise) {
+      this.resolveWithPromise(x);
     } else if (x instanceof Object) {
-      let then;
-      try {
-        then = x.then;
-      } catch (error) {
-        this.reject(error);
-      }
-      if (then instanceof Function) {
-        try {
-          x.then(
-            y => {
-              this.resolveWith(y);
-            },
-            r => {
-              this.reject(r);
-            }
-          );
-        } catch (error) {
-          this.reject(error);
-        }
-      } else {
-        this.resolve(x);
-      }
+      this.resolveWithObject(x);
     } else {
       this.resolve(x);
     }
