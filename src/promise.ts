@@ -47,9 +47,15 @@ class MyPromise {
     const handler = [];
     if (typeof onFulfilled === "function") {
       handler[0] = onFulfilled;
+    } else {
+      handler[0] = value => value;
     }
     if (typeof onRejected === "function") {
       handler[1] = onRejected;
+    } else {
+      handler[1] = e => {
+        throw e;
+      };
     }
     handler[2] = new MyPromise(() => {});
     this.callbacks.push(handler);

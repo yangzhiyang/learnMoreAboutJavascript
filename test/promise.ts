@@ -85,8 +85,8 @@ describe("Promise", () => {
     promise.then(false, null);
   });
   it(`onFulfilled 必须在 promise 完成(fulfilled)后被调用，
-    并把 promise 的值作为它的第一个参数, 函数在promise完成(fulfilled)之前绝对不能被调用
-    并不能被调用超过一次`, done => {
+      并把 promise 的值作为它的第一个参数, 函数在promise完成(fulfilled)之前绝对不能被调用
+      并不能被调用超过一次`, done => {
     const onFulfilled = sinon.fake();
     const promise = new Promise(resolve => {
       assert.isFalse(onFulfilled.called);
@@ -102,8 +102,8 @@ describe("Promise", () => {
     promise.then(onFulfilled);
   });
   it(`onRejected 必须在 promise 完成(rejected)后被调用，
-    并把 promise 的 reason 值作为它的第一个参数, 函数在promise完成(rejected)之前绝对不能被调用
-    并不能被调用超过一次`, done => {
+      并把 promise 的 reason 值作为它的第一个参数, 函数在promise完成(rejected)之前绝对不能被调用
+      并不能被调用超过一次`, done => {
     const onRejected = sinon.fake();
     const promise = new Promise((resolve, reject) => {
       assert.isFalse(onRejected.called);
@@ -276,14 +276,22 @@ describe("Promise", () => {
       done();
     }, 0);
   });
-  it("如果onFulfilled不是一个方法，并且promise1已经完成（fulfilled）, promise2必须使用与promise1相同的值来完成（fulfiled）", done => {
-    const promise1 = new Promise(() => "fulfilled");
-    const promise2 = promise1.then(null);
-    const fn = sinon.fake();
-    promise2.then(fn);
-    setTimeout(() => {
-      assert(fn.called);
-      assert(fn.calledWith("fulfilled"));
-    }, 0);
+  it(`如果onFulfilled不是一个方法，并且promise1已经完成（fulfilled），
+      promise2必须使用与promise1相同的值来完成（fulfiled）;
+      如果onRejected不是一个方法，并且promise1已经被拒绝（rejected）,
+      promise2必须使用与promise1相同的原因来拒绝（rejected）`, done => {
+    const promise1 = new Promise(resolve => {
+      resolve("fulfilled");
+    });
+    const promise2 = new Promise((resolve, reject) => {
+      reject("rejected");
+    });
+    promise1.then(null).then(value => {
+      assert.equal(value, "fulfilled");
+    });
+    promise2.then(null, null).then(null, reason => {
+      assert.equal(reason, "rejected");
+      done();
+    });
   });
 });
