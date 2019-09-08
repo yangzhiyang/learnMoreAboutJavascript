@@ -1,12 +1,10 @@
 class MyPromise {
-  onFulfilled = null;
-  onRejected = null;
   callbacks = [];
   state = "pending";
   resolve(result) {
     if (this.state !== "pending") return;
     this.state = "fulfilled";
-    process.nextTick(() => {
+    nextTick(() => {
       this.callbacks.forEach(handler => {
         if (typeof handler[0] === "function") {
           let x;
@@ -18,12 +16,12 @@ class MyPromise {
           handler[2].resolveWith(x);
         }
       });
-    }, 0);
+    });
   }
   reject(reason) {
     if (this.state !== "pending") return;
     this.state = "rejected";
-    process.nextTick(() => {
+    nextTick(() => {
       this.callbacks.forEach(handler => {
         if (typeof handler[1] === "function") {
           let x;
@@ -35,7 +33,7 @@ class MyPromise {
           handler[2].resolveWith(x);
         }
       });
-    }, 0);
+    });
   }
   constructor(fn) {
     if (typeof fn !== "function") {
@@ -103,3 +101,19 @@ class MyPromise {
 }
 
 export default MyPromise;
+
+function nextTick(fn) {
+  if (process !== undefined && typeof process.nextTick === "function") {
+    return process.nextTick(fn);
+  } else {
+    var counter = 1;
+    var observer = new MutationObserver(fn);
+    var textNode = document.createTextNode(String(counter));
+
+    observer.observe(textNode, {
+      characterData: true
+    });
+    counter += 1;
+    textNode.data = String(counter);
+  }
+}
