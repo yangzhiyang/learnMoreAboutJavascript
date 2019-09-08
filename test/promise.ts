@@ -182,10 +182,21 @@ describe("Promise", () => {
     }, 0);
   });
   it("then 必须返回一个 promise", () => {
-    const promise = new Promise(resolve => {
+    const promise1 = new Promise(resolve => {
       resolve();
     });
-    const promise2 = promise.then(() => {}, () => {});
+    const promise2 = promise1.then(() => {}, () => {});
     assert(promise2 instanceof Promise);
+  });
+  it("如果 onFulfilled 或 onRejected 返回一个值x, 运行[[Resolve]](promise2, x)", done => {
+    const promise1 = new Promise(resolve => {
+      resolve();
+    });
+    promise1
+      .then(() => "success")
+      .then(result => {
+        assert.equal(result, "success");
+        done();
+      });
   });
 });

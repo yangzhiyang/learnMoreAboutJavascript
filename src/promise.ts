@@ -9,7 +9,8 @@ class MyPromise {
     setTimeout(() => {
       this.callbacks.forEach(handler => {
         if (typeof handler[0] === "function") {
-          handler[0].call(undefined, result);
+          const x = handler[0].call(undefined, result);
+          handler[2].resolveWith(x);
         }
       });
     }, 0);
@@ -20,7 +21,8 @@ class MyPromise {
     setTimeout(() => {
       this.callbacks.forEach(handler => {
         if (typeof handler[1] === "function") {
-          handler[1].call(undefined, reason);
+          const x = handler[1].call(undefined, reason);
+          handler[2].resolveWith(x);
         }
       });
     }, 0);
@@ -39,8 +41,48 @@ class MyPromise {
     if (typeof onRejected === "function") {
       handler[1] = onRejected;
     }
+    handler[2] = new MyPromise(() => {});
     this.callbacks.push(handler);
-    return new MyPromise(() => {});
+    return handler[2];
+  }
+  resolveWith(x) {
+    if (this === x) {
+      this.reject(new TypeError());
+    } else if (x instanceof MyPromise) {
+      x.then(
+        result => {
+          this.resolve(result);
+        },
+        reason => {
+          this.reject(reason);
+        }
+      );
+    } else if (x instanceof Object) {
+      let then;
+      try {
+        then = x.then;
+      } catch (error) {
+        this.reject(error);
+      }
+      if (then instanceof Function) {
+        try {
+          x.then(
+            y => {
+              this.resolveWith(y);
+            },
+            r => {
+              this.reject(r);
+            }
+          );
+        } catch (error) {
+          this.reject(error);
+        }
+      } else {
+        this.resolve(x);
+      }
+    } else {
+      this.resolve(x);
+    }
   }
 }
 
