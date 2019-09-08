@@ -199,4 +199,16 @@ describe("Promise", () => {
         done();
       });
   });
+  it("返回值 x 为 Promise 实例时", done => {
+    const promise1 = new Promise(resolve => {
+      resolve();
+    });
+    const fn = sinon.fake();
+    const promise2 = promise1.then(() => new Promise(resolve => resolve()));
+    promise2.then(fn);
+    setTimeout(() => {
+      assert(fn.called);
+      done();
+    }, 10);
+  });
 });
