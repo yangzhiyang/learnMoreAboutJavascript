@@ -40,6 +40,7 @@ class MyPromise {
       handler[1] = onRejected;
     }
     this.callbacks.push(handler);
+    return new MyPromise(() => {});
   }
 }
 

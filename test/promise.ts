@@ -181,4 +181,11 @@ describe("Promise", () => {
       done();
     }, 0);
   });
+  it("then 必须返回一个 promise", () => {
+    const promise = new Promise(resolve => {
+      resolve();
+    });
+    const promise2 = promise.then(() => {}, () => {});
+    assert(promise2 instanceof Promise);
+  });
 });
