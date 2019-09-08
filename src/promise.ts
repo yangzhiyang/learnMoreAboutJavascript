@@ -6,7 +6,7 @@ class MyPromise {
   resolve(result) {
     if (this.state !== "pending") return;
     this.state = "fulfilled";
-    setTimeout(() => {
+    process.nextTick(() => {
       this.callbacks.forEach(handler => {
         if (typeof handler[0] === "function") {
           const x = handler[0].call(undefined, result);
@@ -18,7 +18,7 @@ class MyPromise {
   reject(reason) {
     if (this.state !== "pending") return;
     this.state = "rejected";
-    setTimeout(() => {
+    process.nextTick(() => {
       this.callbacks.forEach(handler => {
         if (typeof handler[1] === "function") {
           const x = handler[1].call(undefined, reason);
