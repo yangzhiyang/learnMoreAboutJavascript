@@ -9,7 +9,12 @@ class MyPromise {
     process.nextTick(() => {
       this.callbacks.forEach(handler => {
         if (typeof handler[0] === "function") {
-          const x = handler[0].call(undefined, result);
+          let x;
+          try {
+            x = handler[0].call(undefined, result);
+          } catch (error) {
+            return handler[2].reject(error);
+          }
           handler[2].resolveWith(x);
         }
       });
@@ -21,7 +26,12 @@ class MyPromise {
     process.nextTick(() => {
       this.callbacks.forEach(handler => {
         if (typeof handler[1] === "function") {
-          const x = handler[1].call(undefined, reason);
+          let x;
+          try {
+            x = handler[1].call(undefined, reason);
+          } catch (error) {
+            return handler[2].reject(error);
+          }
           handler[2].resolveWith(x);
         }
       });

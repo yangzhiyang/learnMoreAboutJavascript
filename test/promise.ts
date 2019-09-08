@@ -199,16 +199,91 @@ describe("Promise", () => {
         done();
       });
   });
-  it("返回值 x 为 Promise 实例时", done => {
+  it("onFulfilled 返回值 x 为 Promise 实例时", done => {
     const promise1 = new Promise(resolve => {
       resolve();
     });
-    const fn = sinon.fake();
+    const fn1 = sinon.fake();
+    const fn2 = sinon.fake();
     const promise2 = promise1.then(() => new Promise(resolve => resolve()));
+    const promise3 = promise1.then(
+      () =>
+        new Promise((resolve, reject) => {
+          reject();
+        })
+    );
+    promise2.then(fn1);
+    promise3.then(null, fn2);
+    setTimeout(() => {
+      assert(fn1.called);
+      assert(fn2.called);
+      done();
+    });
+  });
+  it("onRejected 返回值 x 为 Promise 实例时", done => {
+    const promise1 = new Promise((resolve, reject) => {
+      reject();
+    });
+    const fn1 = sinon.fake();
+    const fn2 = sinon.fake();
+    const promise2 = promise1.then(
+      null,
+      () => new Promise(resolve => resolve())
+    );
+    const promise3 = promise1.then(
+      null,
+      () =>
+        new Promise((resolve, reject) => {
+          reject();
+        })
+    );
+    promise2.then(fn1);
+    promise3.then(null, fn2);
+    setTimeout(() => {
+      assert(fn1.called);
+      assert(fn2.called);
+      done();
+    });
+  });
+  it("如果 onFulfilled 或 onRejected 抛出一个异常e,promise2 必须被拒绝（rejected）并把e当作原因", done => {
+    const error1 = new Error();
+    const error2 = new Error();
+    const fn1 = sinon.fake();
+    const fn2 = sinon.fake();
+
+    const promise1 = new Promise(resolve => {
+      resolve();
+    });
+    const promise2 = new Promise((resolve, reject) => {
+      reject();
+    });
+
+    const promise3 = promise1.then(() => {
+      throw error1;
+    });
+    const promise4 = promise2.then(null, () => {
+      throw error2;
+    });
+
+    promise3.then(null, fn1);
+    promise4.then(null, fn2);
+
+    setTimeout(() => {
+      assert(fn1.called);
+      assert(fn2.called);
+      assert(fn1.calledWith(error1));
+      assert(fn2.calledWith(error2));
+      done();
+    }, 0);
+  });
+  it("如果onFulfilled不是一个方法，并且promise1已经完成（fulfilled）, promise2必须使用与promise1相同的值来完成（fulfiled）", done => {
+    const promise1 = new Promise(() => "fulfilled");
+    const promise2 = promise1.then(null);
+    const fn = sinon.fake();
     promise2.then(fn);
     setTimeout(() => {
       assert(fn.called);
-      done();
-    });
+      assert(fn.calledWith("fulfilled"));
+    }, 0);
   });
 });
