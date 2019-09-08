@@ -1,6 +1,11 @@
 class MyPromise {
+  STATE_FULFILLED = "fulfilled";
+  STATE_REJECTED = "rejected";
+  STATE_PENDING = "pending";
+
+  state = this.STATE_PENDING;
+
   callbacks = [];
-  state = "pending";
 
   constructor(fn) {
     if (typeof fn !== "function") {
@@ -10,9 +15,9 @@ class MyPromise {
   }
 
   private resolveOrReject(state, data) {
-    if (this.state !== "pending") return;
+    if (this.state !== this.STATE_PENDING) return;
     this.state = state;
-    const i = ["fulfilled", "rejected"].indexOf(state);
+    const i = [this.STATE_FULFILLED, this.STATE_REJECTED].indexOf(state);
     nextTick(() => {
       this.callbacks.forEach(handler => {
         if (typeof handler[i] === "function") {
@@ -29,11 +34,11 @@ class MyPromise {
   }
 
   resolve(result) {
-    this.resolveOrReject("fulfilled", result);
+    this.resolveOrReject(this.STATE_FULFILLED, result);
   }
 
   reject(reason) {
-    this.resolveOrReject("rejected", reason);
+    this.resolveOrReject(this.STATE_REJECTED, reason);
   }
 
   then(onFulfilled?, onRejected?) {
