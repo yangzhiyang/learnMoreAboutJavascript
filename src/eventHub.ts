@@ -6,7 +6,7 @@ class Eventhub {
     }
     this.cache[eventName].push(fn);
   }
-  emit(eventName: string, data: unknown) {
+  emit(eventName: string, data?: unknown) {
     if (this.cache[eventName] === undefined) {
       this.cache[eventName] = [];
     }
@@ -14,18 +14,18 @@ class Eventhub {
       fn(data);
     });
   }
-  off(eventName: string, fn: (data: unknown) => void) {
+  off(eventName: string, fn: (data?: unknown) => void) {
     if (this.cache[eventName] === undefined) {
       this.cache[eventName] = [];
     }
-    let index;
+    let index = undefined;
     for (let i = 0; i < this.cache[eventName].length; i++) {
       if (this.cache[eventName][i] === fn) {
         index = i;
         break;
       }
     }
-    if (!index) {
+    if (index === undefined) {
       return;
     } else {
       this.cache[eventName].splice(index, 1);
