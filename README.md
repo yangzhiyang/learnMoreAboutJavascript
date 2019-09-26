@@ -17,3 +17,7 @@
 ### 二、EventHub
 源码：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/eventHub.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/eventHub.ts)        
 测试用例：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/eventHub.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/eventHub.ts)        
+
+### 三、深拷贝
+源码：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/deepClone.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/deepClone.ts)      
+测试用例：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/deepClone.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/deepClone.ts)
