@@ -78,5 +78,11 @@ describe("deepClone", () => {
       assert(a.source === a2.source);
       assert(a.flags === a2.flags);
     });
+    it("可以复制时间对象", () => {
+      const a = new Date();
+      const a2 = deepClone(a);
+      assert(a !== a2);
+      assert(a.getTime() === a2.getTime());
+    });
   });
 });
