@@ -71,5 +71,12 @@ describe("deepClone", () => {
       // @ts-ignore
       assert(a.self !== a2.self);
     });
+    it("可以复制正则表达式", () => {
+      //   const a = /hi\d+/gi;
+      const a = new RegExp("hi\\d+", "gi");
+      const a2 = deepClone(a);
+      assert(a.source === a2.source);
+      assert(a.flags === a2.flags);
+    });
   });
 });
