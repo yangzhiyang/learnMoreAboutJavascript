@@ -61,5 +61,15 @@ describe("deepClone", () => {
       assert(a.xxx !== a2.xxx);
       assert(a(1, 2) === a2(1, 2));
     });
+    it("循环引用也能复制", () => {
+      const a = { name: "李雷" };
+      // @ts-ignore
+      a.self = a;
+      const a2 = deepClone(a);
+      assert(a !== a2);
+      assert(a.name === a2.name);
+      // @ts-ignore
+      assert(a.self !== a2.self);
+    });
   });
 });
