@@ -84,5 +84,11 @@ describe("deepClone", () => {
       assert(a !== a2);
       assert(a.getTime() === a2.getTime());
     });
+    it("不复制原型属性", () => {
+      const a = Object.create({ name: "a" });
+      const a2 = deepClone(a);
+      assert(a !== a2);
+      assert.isFalse("name" in a2);
+    });
   });
 });
