@@ -22,8 +22,16 @@ describe("bind", () => {
       return [a1, a2];
     };
     // @ts-ignore
-    const newFn = fn.myBind({ name: "myBind" }, 123, 456);
-    assert(newFn()[0] === 123);
-    assert(newFn()[1] === 456);
+    const newFn1 = fn.myBind({ name: "myBind" }, 123, 456);
+    assert(newFn1()[0] === 123);
+    assert(newFn1()[1] === 456);
+    // @ts-ignore
+    const newFn2 = fn.myBind({ name: "myBind" });
+    assert(newFn2(234, 567)[0] === 234);
+    assert(newFn2(234, 567)[1] === 567);
+    // @ts-ignore
+    const newFn3 = fn.myBind({ name: "myBind" }, 123);
+    assert(newFn3(567)[0] === 123);
+    assert(newFn3(567)[1] === 567);
   });
 });
