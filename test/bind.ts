@@ -17,4 +17,13 @@ describe("bind", () => {
     const newFn = fn.myBind({ name: "myBind" });
     assert(newFn().name === "myBind");
   });
+  it("可以传参", () => {
+    const fn = function(a1, a2) {
+      return [a1, a2];
+    };
+    // @ts-ignore
+    const newFn = fn.myBind({ name: "myBind" }, 123, 456);
+    assert(newFn()[0] === 123);
+    assert(newFn()[1] === 456);
+  });
 });
