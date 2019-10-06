@@ -23,7 +23,7 @@ function deepClone(source) {
       cache.push([source, dist]);
       for (let key in source) {
         if (source.hasOwnProperty(key)) {
-          dist[key] = deepClone(source[key]);
+          dist[key] = deepClone(source[key]); 
         }
       }
       return dist;
