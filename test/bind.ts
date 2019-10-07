@@ -1,12 +1,11 @@
 import * as chai from "chai";
 import * as sinon from "sinon";
 import * as sinonChai from "sinon-chai";
-import bind from "../src/bind";
+const bind = require("../src/bind.js");
 
 chai.use(sinonChai);
 const assert = chai.assert;
 (Function.prototype as any).myBind = bind;
-assert((Function.prototype as any).myBind !== undefined);
 
 describe("bind", () => {
   it("可以绑定this", () => {
@@ -33,5 +32,18 @@ describe("bind", () => {
     const newFn3 = fn.myBind({ name: "myBind" }, 123);
     assert(newFn3(567)[0] === 123);
     assert(newFn3(567)[1] === 567);
+  });
+  it("支持 new ", () => {
+    const fn = function(a1, a2) {
+      this.a1 = a1;
+      this.a2 = a2;
+    };
+    // @ts-ignore
+    console.log(fn.__proto__, "this");
+    // @ts-ignore
+    const newFn1 = fn.myBind({ name: "myBind" }, 123, 456);
+    const newFn2 = new newFn1();
+    // assert(newFn2.a1 === 123);
+    // assert(newFn2.a2 === 456);
   });
 });
