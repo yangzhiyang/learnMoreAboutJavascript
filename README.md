@@ -24,7 +24,7 @@
 源码：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/deepClone.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/deepClone.ts)  
 测试用例：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/deepClone.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/deepClone.ts)
 
-### 三、手写 bind
+### 四、手写 bind
 
 源码：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/bind.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/bind.ts)  
 测试用例：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/bind.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/bind.ts)
