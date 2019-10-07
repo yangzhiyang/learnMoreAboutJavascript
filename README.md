@@ -15,9 +15,16 @@
 以规范中的`Requirements`描述的要求编写测试用例
 
 ### 二、EventHub
-源码：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/eventHub.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/eventHub.ts)        
-测试用例：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/eventHub.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/eventHub.ts)        
 
-### 三、深拷贝
-源码：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/deepClone.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/deepClone.ts)      
+源码：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/eventHub.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/eventHub.ts)  
+测试用例：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/eventHub.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/eventHub.ts)
+
+### 三、手写深拷贝
+
+源码：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/deepClone.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/deepClone.ts)  
 测试用例：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/deepClone.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/deepClone.ts)
+
+### 三、手写 bind
+
+源码：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/bind.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/src/bind.ts)  
+测试用例：[https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/bind.ts](https://github.com/yangzhiyang/learnMoreAboutJavascript/blob/master/test/bind.ts)
