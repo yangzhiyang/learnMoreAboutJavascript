@@ -1,7 +1,7 @@
 import * as chai from "chai";
 import * as sinon from "sinon";
 import * as sinonChai from "sinon-chai";
-const bind = require("../src/bind.js");
+import bind from "../src/bind";
 
 chai.use(sinonChai);
 const assert = chai.assert;
