@@ -45,5 +45,6 @@ describe("bind", () => {
     assert(newFn2.a1 === 123);
     assert(newFn2.a2 === 456);
     assert(newFn2.test === "test");
+    assert(fn.prototype.isPrototypeOf(newFn2));
   });
 });
